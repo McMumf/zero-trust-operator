@@ -1,4 +1,4 @@
 ## Append samples of your project ##
 resources:
-- zto_v1alpha1_tunnel.yaml
+- tunnel_v1alpha1_tunnelconnection.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples

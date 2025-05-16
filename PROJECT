@@ -5,19 +5,16 @@
 domain: mcmumf.dev
 layout:
 - go.kubebuilder.io/v4
-plugins:
-  manifests.sdk.operatorframework.io/v2: {}
-  scorecard.sdk.operatorframework.io/v2: {}
 projectName: zero-trust-orchestrator
-repo: github.com/McMumf/zero-trust-orchestrator
+repo: mcmumf.dev/zero-trust-operator
 resources:
 - api:
     crdVersion: v1
     namespaced: true
   controller: true
   domain: mcmumf.dev
-  group: zto
-  kind: Tunnel
-  path: github.com/McMumf/zero-trust-orchestrator/api/v1alpha1
+  group: tunnel
+  kind: TunnelConnection
+  path: mcmumf.dev/zero-trust-operator/api/v1alpha1
   version: v1alpha1
 version: "3"
