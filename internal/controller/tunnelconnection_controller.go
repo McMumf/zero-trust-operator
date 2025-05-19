@@ -47,9 +47,14 @@ type TunnelConnectionReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.20.4/pkg/reconcile
 func (r *TunnelConnectionReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = logf.FromContext(ctx)
+	log := logf.FromContext(ctx)
 
-	// TODO(user): your logic here
+	log.Info("Watching Tunnel Connection")
+	tunnel := &tunnelv1alpha1.TunnelConnection{}
+	if err := r.Get(ctx, req.NamespacedName, tunnel); err != nil {
+		log.Error(err, "unable to fetch Tunnel Connection")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
 
 	return ctrl.Result{}, nil
 }
