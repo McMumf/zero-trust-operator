@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package controller
+package ingress
 
 import (
 	"context"
@@ -30,26 +30,53 @@ import (
 	networkingv1 "k8s.io/api/networking/v1"
 )
 
-var _ = Describe("TunnelConnection Controller", func() {
+var _ = Describe("IngressThing Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
 		ctx := context.Background()
+		ingressClassName := "nginx"
+		pathType := "Prefix"
 
 		typeNamespacedName := types.NamespacedName{
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		tunnelconnection := &networkingv1.Ingress{}
+		ingressController := &networkingv1.Ingress{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind TunnelConnection")
-			err := k8sClient.Get(ctx, typeNamespacedName, tunnelconnection)
+			By("creating the custom resource for the Kind IngressThing")
+			err := k8sClient.Get(ctx, typeNamespacedName, ingressController)
 			if err != nil && errors.IsNotFound(err) {
 				resource := &networkingv1.Ingress{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
+					},
+					Spec: networkingv1.IngressSpec{
+						IngressClassName: &ingressClassName,
+						Rules: []networkingv1.IngressRule{
+							{
+								IngressRuleValue: networkingv1.IngressRuleValue{
+									HTTP: &networkingv1.HTTPIngressRuleValue{
+										Paths: []networkingv1.HTTPIngressPath{
+											{
+												Path:     "/ass",
+												PathType: (*networkingv1.PathType)(&pathType),
+												Backend: networkingv1.IngressBackend{
+													Service: &networkingv1.IngressServiceBackend{
+														Name: "svc-name",
+														Port: networkingv1.ServiceBackendPort{
+															Number: 8188,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 					// TODO(user): Specify other spec details if needed.
 				}
@@ -68,7 +95,7 @@ var _ = Describe("TunnelConnection Controller", func() {
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &IngressThingReconcilder{
+			controllerReconciler := &IngressControllerReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

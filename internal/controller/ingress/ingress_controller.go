@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package controller
+package ingress
 
 import (
 	"context"
@@ -31,12 +31,12 @@ import (
 )
 
 // TunnelConnectionReconciler reconciles a TunnelConnection object
-type IngressThingReconcilder struct {
+type IngressControllerReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
-func (r *IngressThingReconcilder) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *IngressControllerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := logf.FromContext(ctx)
 
 	log.Info("Watching Ingress Thing")
@@ -50,7 +50,7 @@ func (r *IngressThingReconcilder) Reconcile(ctx context.Context, req ctrl.Reques
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *IngressThingReconcilder) SetupWithManager(mgr ctrl.Manager) error {
+func (r *IngressControllerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&networkingv1.Ingress{}).
 		Watches(

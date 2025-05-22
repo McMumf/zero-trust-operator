@@ -38,7 +38,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
 	tunnelv1alpha1 "mcmumf.dev/zero-trust-operator/api/v1alpha1"
-	"mcmumf.dev/zero-trust-operator/internal/controller"
+	"mcmumf.dev/zero-trust-operator/internal/controller/tunnelconnection"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -202,7 +202,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controller.TunnelConnectionReconciler{
+	if err = (&tunnelconnection.TunnelConnectionReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
