@@ -19,6 +19,7 @@ package ingress
 import (
 	"context"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -28,6 +29,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	networkingv1 "k8s.io/api/networking/v1"
+	cnamev1alpha1 "mcmumf.dev/zero-trust-operator/api/v1alpha1"
 )
 
 // IngressControllerReconciler reconciles a Ingress object
@@ -53,10 +55,35 @@ func (r *IngressControllerReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	// Check if CNAME for ingress already exists
 	err := r.Get(ctx, types.NamespacedName{Name: ingressCname, Namespace: ingress.Namespace}, nil)
 	if err == nil {
-		log.Info("CNAME already exists, skipping creation")
+		log.Info("CNAME already exists, skipping creation", "Ingress.Namespace", ingress.Namespace, "Ingress.Name", ingress.Name)
+		return ctrl.Result{}, nil
 	}
 
+	// Create new CNAME
+	newCname := r.createCname(ingress)
+
+	// Create the CNAME
+
+	if err := r.Create(ctx, newCname); err != nil {
+		log.Error(err, "Failed to create CNAME for ingress", "Ingress.Namespace", ingress.Namespace, "Ingress.Name", ingress.Name)
+		return ctrl.Result{}, nil
+	}
+
+	log.Info("CNAME created successfully", "Cname.Namespace", newCname.Namespace, "Cname.Name", newCname.Name)
+
 	return ctrl.Result{}, nil
+}
+
+func (r *IngressControllerReconciler) createCname(ingress *networkingv1.Ingress) *cnamev1alpha1.Cname {
+	return &cnamev1alpha1.Cname{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      ingress.Name + "-cname",
+			Namespace: ingress.Namespace,
+		},
+		Spec: cnamev1alpha1.CnameSpec{
+			CNAME: ingress.Spec.Rules[0].Host,
+		},
+	}
 }
 
 // SetupWithManager sets up the controller with the Manager.
