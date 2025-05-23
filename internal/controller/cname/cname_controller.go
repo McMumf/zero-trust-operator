@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package tunnelconnection
+package cname
 
 import (
 	"context"
@@ -24,35 +24,35 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
-	tunnelv1alpha1 "mcmumf.dev/zero-trust-operator/api/v1alpha1"
+	cnamev1alpha1 "mcmumf.dev/zero-trust-operator/api/v1alpha1"
 )
 
-// TunnelConnectionReconciler reconciles a TunnelConnection object
-type TunnelConnectionReconciler struct {
+// CnameReconciler reconciles a Cname object
+type CnameReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=tunnel.mcmumf.dev,resources=tunnelconnections,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=tunnel.mcmumf.dev,resources=tunnelconnections/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=tunnel.mcmumf.dev,resources=tunnelconnections/finalizers,verbs=update
+// +kubebuilder:rbac:groups=cname.mcmumf.dev,resources=cnames,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=cname.mcmumf.dev,resources=cnames/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=cname.mcmumf.dev,resources=cnames/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the TunnelConnection object against the actual cluster state, and then
+// the Cname object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.20.4/pkg/reconcile
-func (r *TunnelConnectionReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *CnameReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := logf.FromContext(ctx)
 
-	log.Info("Watching Tunnel Connection")
-	tunnel := &tunnelv1alpha1.TunnelConnection{}
-	if err := r.Get(ctx, req.NamespacedName, tunnel); err != nil {
-		log.Error(err, "unable to fetch Tunnel Connection")
+	log.Info("Watching CNAME")
+	cnameObj := &cnamev1alpha1.Cname{}
+	if err := r.Get(ctx, req.NamespacedName, cnameObj); err != nil {
+		log.Error(err, "unable to fetch CNAME")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -60,9 +60,9 @@ func (r *TunnelConnectionReconciler) Reconcile(ctx context.Context, req ctrl.Req
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *TunnelConnectionReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *CnameReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&tunnelv1alpha1.TunnelConnection{}).
-		Named("tunnelconnection").
+		For(&cnamev1alpha1.Cname{}).
+		Named("cname").
 		Complete(r)
 }

@@ -22,7 +22,7 @@ resources:
 # default, aiding admins in cluster management. Those roles are
 # not used by the {{ .ProjectName }} itself. You can comment the following lines
 # if you do not want those helpers be installed with your Project.
-- tunnelconnection_admin_role.yaml
-- tunnelconnection_editor_role.yaml
-- tunnelconnection_viewer_role.yaml
+- cname_admin_role.yaml
+- cname_editor_role.yaml
+- cname_viewer_role.yaml
 

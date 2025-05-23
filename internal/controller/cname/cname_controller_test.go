@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package tunnelconnection
+package cname
 
 import (
 	"context"
@@ -27,10 +27,10 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	tunnelv1alpha1 "mcmumf.dev/zero-trust-operator/api/v1alpha1"
+	cnamev1alpha1 "mcmumf.dev/zero-trust-operator/api/v1alpha1"
 )
 
-var _ = Describe("TunnelConnection Controller", func() {
+var _ = Describe("Cname Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
@@ -40,13 +40,13 @@ var _ = Describe("TunnelConnection Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		tunnelconnection := &tunnelv1alpha1.TunnelConnection{}
+		cname := &cnamev1alpha1.Cname{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind TunnelConnection")
-			err := k8sClient.Get(ctx, typeNamespacedName, tunnelconnection)
+			By("creating the custom resource for the Kind Cname")
+			err := k8sClient.Get(ctx, typeNamespacedName, cname)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &tunnelv1alpha1.TunnelConnection{
+				resource := &cnamev1alpha1.Cname{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,16 +59,16 @@ var _ = Describe("TunnelConnection Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &tunnelv1alpha1.TunnelConnection{}
+			resource := &cnamev1alpha1.Cname{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Cleanup the specific resource instance TunnelConnection")
+			By("Cleanup the specific resource instance Cname")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &TunnelConnectionReconciler{
+			controllerReconciler := &CnameReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

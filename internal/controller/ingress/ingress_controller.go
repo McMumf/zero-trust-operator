@@ -30,20 +30,30 @@ import (
 	networkingv1 "k8s.io/api/networking/v1"
 )
 
-// TunnelConnectionReconciler reconciles a TunnelConnection object
+// IngressControllerReconciler reconciles a Ingress object
 type IngressControllerReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
+// +kubebuilder:rbac:groups=networking.k8s.io,resources=ingresses,verbs=get;list;watch
+// +kubebuilder:rbac:groups=networking.k8s.io,resources=ingresses/status,verbs=get
 func (r *IngressControllerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := logf.FromContext(ctx)
 
 	log.Info("Watching Ingress Thing")
 	ingress := &networkingv1.Ingress{}
 	if err := r.Get(ctx, req.NamespacedName, ingress); err != nil {
-		log.Error(err, "unable to fetch Ingress Thing")
+		log.Error(err, "Unabled to fetch Ingress")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	ingressCname := ingress.Name + "-cname"
+
+	// Check if CNAME for ingress already exists
+	err := r.Get(ctx, types.NamespacedName{Name: ingressCname, Namespace: ingress.Namespace}, nil)
+	if err == nil {
+		log.Info("CNAME already exists, skipping creation")
 	}
 
 	return ctrl.Result{}, nil

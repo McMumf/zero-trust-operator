@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.17.2
-  name: tunnelconnections.tunnel.mcmumf.dev
+  name: cnames.cname.mcmumf.dev
 spec:
-  group: tunnel.mcmumf.dev
+  group: cname.mcmumf.dev
   names:
-    kind: TunnelConnection
-    listKind: TunnelConnectionList
-    plural: tunnelconnections
-    singular: tunnelconnection
+    kind: Cname
+    listKind: CnameList
+    plural: cnames
+    singular: cname
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: TunnelConnection is the Schema for the tunnelconnections API.
+        description: Cname is the Schema for the cnames API.
         properties:
           apiVersion:
             description: |-
@@ -37,17 +37,20 @@ spec:
           metadata:
             type: object
           spec:
-            description: TunnelConnectionSpec defines the desired state of TunnelConnection.
+            description: CnameSpec defines the desired state of Cname.
             properties:
-              tunnelDns:
-                type: string
-              tunnelEmail:
-                type: string
-              tunnelToken:
+              cname:
                 type: string
             type: object
           status:
-            description: TunnelConnectionStatus defines the observed state of TunnelConnection.
+            description: CnameStatus defines the observed state of Cname.
+            properties:
+              refreshTime:
+                description: The time and date the cname was fetched and tunnel provider
+                  updated
+                format: date-time
+                nullable: true
+                type: string
             type: object
         type: object
     served: true

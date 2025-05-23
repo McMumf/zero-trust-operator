@@ -23,45 +23,41 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// TunnelConnectionSpec defines the desired state of TunnelConnection.
-type TunnelConnectionSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+// CnameSpec defines the desired state of Cname.
+type CnameSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of TunnelConnection. Edit tunnelconnection_types.go to remove/update
-
-	TUNNEL_TOKEN string `json:"tunnelToken,omitempty"`
-	TUNNEL_EMAIL string `json:"tunnelEmail,omitempty"`
-	TUNNEL_DNS   string `json:"tunnelDns,omitempty"`
+	CNAME string `json:"cname,omitempty"`
 }
 
-// TunnelConnectionStatus defines the observed state of TunnelConnection.
-type TunnelConnectionStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+// CnameStatus defines the observed state of Cname.
+type CnameStatus struct {
+	// +nullable
+	// The time and date the cname was fetched and tunnel provider updated
+	RefreshTime metav1.Time `json:"refreshTime,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// TunnelConnection is the Schema for the tunnelconnections API.
-type TunnelConnection struct {
+// Cname is the Schema for the cnames API.
+type Cname struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   TunnelConnectionSpec   `json:"spec,omitempty"`
-	Status TunnelConnectionStatus `json:"status,omitempty"`
+	Spec   CnameSpec   `json:"spec,omitempty"`
+	Status CnameStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// TunnelConnectionList contains a list of TunnelConnection.
-type TunnelConnectionList struct {
+// CnameList contains a list of Cname.
+type CnameList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []TunnelConnection `json:"items"`
+	Items           []Cname `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&TunnelConnection{}, &TunnelConnectionList{})
+	SchemeBuilder.Register(&Cname{}, &CnameList{})
 }

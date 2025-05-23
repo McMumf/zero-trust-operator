@@ -5,9 +5,9 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
-  - tunnel.mcmumf.dev
+  - cname.mcmumf.dev
   resources:
-  - tunnelconnections
+  - cnames
   verbs:
   - create
   - delete
@@ -17,15 +17,15 @@ rules:
   - update
   - watch
 - apiGroups:
-  - tunnel.mcmumf.dev
+  - cname.mcmumf.dev
   resources:
-  - tunnelconnections/finalizers
+  - cnames/finalizers
   verbs:
   - update
 - apiGroups:
-  - tunnel.mcmumf.dev
+  - cname.mcmumf.dev
   resources:
-  - tunnelconnections/status
+  - cnames/status
   verbs:
   - get
   - patch

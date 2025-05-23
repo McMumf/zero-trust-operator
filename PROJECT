@@ -5,7 +5,7 @@
 domain: mcmumf.dev
 layout:
 - go.kubebuilder.io/v4
-projectName: zero-trust-orchestrator
+projectName: zero-trust-operator
 repo: mcmumf.dev/zero-trust-operator
 resources:
 - api:
@@ -13,8 +13,8 @@ resources:
     namespaced: true
   controller: true
   domain: mcmumf.dev
-  group: tunnel
-  kind: TunnelConnection
+  group: cname
+  kind: Cname
   path: mcmumf.dev/zero-trust-operator/api/v1alpha1
   version: v1alpha1
 version: "3"
